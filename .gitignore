@@ -1,0 +1,36 @@
+.anchor
+.DS_Store
+target
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+
+# ─── Expo / React Native ───────────────────────────
+packages/mobile-client/node_modules/
+packages/mobile-client/.expo/
+packages/mobile-client/dist/
+packages/mobile-client/build/
+packages/mobile-client/android/
+packages/mobile-client/ios/
+packages/mobile-client/expo-env.d.ts
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# ─── IDL package ───────────────────────────────────
+packages/idl/dist/
+
+# ─── General ───────────────────────────────────────
+.DS_Store
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.env
+.env.local
+.env*.local
+.pnpm-debug.log
