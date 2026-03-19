@@ -14,6 +14,11 @@ packages/mobile-client/build/
 packages/mobile-client/android/
 packages/mobile-client/ios/
 packages/mobile-client/expo-env.d.ts
+
+# Root `mobile-client/` app (Expo prebuild / local)
+mobile-client/.expo/
+mobile-client/android/
+mobile-client/ios/
 *.jks
 *.p8
 *.p12
