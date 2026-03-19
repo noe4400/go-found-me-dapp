@@ -39,6 +39,32 @@ pub mod go_found_me_dapp {
         Ok(())
     }
 
+    pub fn donate(ctx: Context<Donate>, amount: u64) -> Result<()> {
+        require!(amount > 0, GoFoundMeError::InvalidAmount);
+
+        let ix = anchor_lang::solana_program::system_instruction::transfer(
+            &ctx.accounts.user.key(),
+            &ctx.accounts.campaign.key(),
+            amount,
+        );
+
+        anchor_lang::solana_program::program::invoke(
+            &ix,
+            &[
+                ctx.accounts.user.to_account_info(),
+                ctx.accounts.campaign.to_account_info(),
+            ],
+        )?;
+
+        let campaign = &mut ctx.accounts.campaign;
+        campaign.amount_donated = campaign
+            .amount_donated
+            .checked_add(amount)
+            .ok_or(GoFoundMeError::ArithmeticOverflow)?;
+
+        Ok(())
+    }
+
     pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
         let campaign = &mut ctx.accounts.campaign;
         let user = &mut ctx.accounts.user;
@@ -91,6 +117,15 @@ pub struct Withdraw<'info> {
     pub user: Signer<'info>,
 }
 
+#[derive(Accounts)]
+pub struct Donate<'info> {
+    #[account(mut)]
+    pub campaign: Account<'info, Campaign>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
 #[error_code]
 pub enum GoFoundMeError {
     #[msg("You are not the admin/owner of this campaign")]
@@ -103,4 +138,6 @@ pub enum GoFoundMeError {
     DescriptionTooLong,
     #[msg("Invalid amount (must be greater than 0)")]
     InvalidAmount,
+    #[msg("Arithmetic overflow detected")]
+    ArithmeticOverflow,
 }

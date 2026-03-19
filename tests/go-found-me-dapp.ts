@@ -100,4 +100,46 @@ describe("go-found-me-dapp", () => {
     expect(campaignBalAfterWithdraw).to.eq(campaignBalAfterDeposit - amountToWithdraw);
     expect(campaignBalAfterWithdraw).to.be.at.least(rentExempt);
   });
+
+  it("Allows donating SOL and updates campaign amountDonated", async () => {
+    const donor = anchor.getProvider()!.wallet.publicKey;
+    const [campaignPda] = await anchor.web3.PublicKey.findProgramAddress(
+      [Buffer.from("CAMPAIGN"), donor.toBuffer()],
+      program.programId
+    );
+
+    try {
+      await program.methods
+        .createCampaign("Donate Campaign", "Donation flow")
+        .accounts({
+          campaign: campaignPda,
+          user: donor,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        })
+        .rpc();
+    } catch (e) {
+      // ignore if it already exists
+    }
+
+    const donation = 300_000;
+    const campaignBefore = await program.account.campaign.fetch(campaignPda);
+    const donatedBefore = Number((campaignBefore as any).amountDonated.toString());
+    const balanceBefore = await program.provider.connection.getBalance(campaignPda);
+
+    await program.methods
+      .donate(new anchor.BN(donation))
+      .accounts({
+        campaign: campaignPda,
+        user: donor,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      })
+      .rpc();
+
+    const campaignAfter = await program.account.campaign.fetch(campaignPda);
+    const donatedAfter = Number((campaignAfter as any).amountDonated.toString());
+    const balanceAfter = await program.provider.connection.getBalance(campaignPda);
+
+    expect(donatedAfter - donatedBefore).to.eq(donation);
+    expect(balanceAfter - balanceBefore).to.eq(donation);
+  });
 });
