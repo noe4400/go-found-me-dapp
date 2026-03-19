@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::entrypoint::ProgramResult;
 
 declare_id!("8dEaxxxHHFCK5CSkQp8Ljg3vRJZMhpfukZFK9NaJNF9w");
 
@@ -21,12 +22,27 @@ pub struct Campaign {
 #[program]
 pub mod go_found_me_dapp {
     use super::*;
-
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
+    pub fn create_campaign(ctx: Context<Create>, name: String, description: String) -> ProgramResult {
+        let campaign = &mut ctx.accounts.campaign;
+        campaign.name = name;
+        campaign.description = description;
+        campaign.amount_donated = 0;
+        campaign.admin = *ctx.accounts.user.key;
         Ok(())
     }
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct Create<'info> {
+    #[account(
+        init,
+        payer = user,
+        space = CAMPAIGN_SPACE,
+        seeds = [b"CAMPAIGN".as_ref(), user.key().as_ref()],
+        bump
+    )]
+    pub campaign: Account<'info, Campaign>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
