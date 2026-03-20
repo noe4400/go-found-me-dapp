@@ -120,6 +120,9 @@ export interface ThemeColors {
   heart: string;
   highlight: string;
   accentWash: string;
+  /** Figma Splash (1:26) — CTA & tagline */
+  splashCtaBackground: string;
+  splashTagline: string;
 }
 
 export interface ThemeTypography {
@@ -192,6 +195,8 @@ export const lightTheme: AppTheme = {
     heart: palette.coral,
     highlight: palette.lime,
     accentWash: palette.sand,
+    splashCtaBackground: '#4ba663',
+    splashTagline: '#313131',
   },
   spacing,
   radii,
@@ -243,6 +248,8 @@ export const darkTheme: AppTheme = {
     heart: '#FF8A9B',
     highlight: palette.leaf,
     accentWash: '#1E2822',
+    splashCtaBackground: '#4ba663',
+    splashTagline: '#313131',
   },
   spacing,
   radii,

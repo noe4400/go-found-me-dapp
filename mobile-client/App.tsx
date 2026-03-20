@@ -1,8 +1,8 @@
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { SplashScreen } from './components/splash-screen';
 import { googleFontsToLoad } from './theme/fonts';
 
 export default function App() {
@@ -17,32 +17,9 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Go Found Me</Text>
-      <Text style={styles.subtitle}>Theme wired — open theme/fundraisingTheme.ts to tune colors.</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <SplashScreen />
+      <StatusBar style="dark" />
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    backgroundColor: theme.colors.background,
-  },
-  title: {
-    fontFamily: theme.typography.fontFamily.display.bold,
-    fontSize: theme.typography.fontSize.titleLarge,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-  },
-  subtitle: {
-    fontFamily: theme.typography.fontFamily.sans.regular,
-    fontSize: theme.typography.fontSize.bodySmall,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-  },
-}));
