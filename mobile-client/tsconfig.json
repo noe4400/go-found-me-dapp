@@ -1,6 +1,12 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "react-native-unistyles/components/native/Pressable": [
+        "node_modules/react-native-unistyles/lib/typescript/src/components/native/Pressable.native.d.ts"
+      ]
+    }
   }
 }

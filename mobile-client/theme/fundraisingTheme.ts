@@ -44,10 +44,14 @@ const spacing = {
 
 const radii = {
   xs: 4,
+  /** Cards, primary CTAs (Figma ~5px) */
+  compact: 5,
   sm: 8,
   md: 12,
   lg: 16,
   xl: 24,
+  /** Bottom sheet / large top corners (Figma ~32px) */
+  sheet: 32,
   full: 9999,
 } as const;
 

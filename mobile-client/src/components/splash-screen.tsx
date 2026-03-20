@@ -1,7 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Image } from 'expo-image';
 import { Pressable, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native-unistyles';
+
+import type { RootStackParamList } from '../navigation/types';
 
 /** Figma frame “Splash screen” (node 1:26) — hero + logo + tagline + CTA */
 const HERO_HEIGHT_RATIO = 0.42;
@@ -12,6 +16,7 @@ export type SplashScreenProps = {
 };
 
 export function SplashScreen({ onStartPress }: SplashScreenProps) {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { height, width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const heroHeight = Math.round(height * HERO_HEIGHT_RATIO);
@@ -22,7 +27,7 @@ export function SplashScreen({ onStartPress }: SplashScreenProps) {
     <View style={styles.root}>
       <View style={[styles.heroClip, { height: heroHeight }]}>
         <Image
-          source={require('../assets/splash/splash-hero.jpg')}
+          source={require('../../assets/splash/splash-hero.jpg')}
           style={styles.heroImage}
           contentFit="cover"
           transition={200}
@@ -32,7 +37,7 @@ export function SplashScreen({ onStartPress }: SplashScreenProps) {
       <View style={[styles.body, { paddingBottom: insets.bottom + 16 }]}>
         <View style={styles.centerBlock}>
           <Image
-            source={require('../assets/splash/splash-logo.png')}
+            source={require('../../assets/splash/splash-logo.png')}
             style={{ width: logoWidth, height: logoHeight }}
             contentFit="contain"
             transition={200}
@@ -44,7 +49,7 @@ export function SplashScreen({ onStartPress }: SplashScreenProps) {
 
         <Pressable
           style={({ pressed }) => [styles.cta, pressed && styles.ctaPressed]}
-          onPress={onStartPress}
+          onPress={onStartPress ?? (() => navigation.replace('Start'))}
           accessibilityRole="button"
           accessibilityLabel="Start a GoFundMe"
         >
@@ -93,7 +98,7 @@ const styles = StyleSheet.create((theme) => ({
   },
   cta: {
     height: 59,
-    borderRadius: 5,
+    borderRadius: theme.radii.compact,
     backgroundColor: theme.colors.splashCtaBackground,
     alignItems: 'center',
     justifyContent: 'center',

@@ -1,8 +1,11 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { SplashScreen } from './components/splash-screen';
+import { RootStack } from './src/navigation/root-stack';
 import { googleFontsToLoad } from './theme/fonts';
 
 export default function App() {
@@ -17,9 +20,15 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <SplashScreen />
-      <StatusBar style="dark" />
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <RootStack />
+            <StatusBar style="dark" />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
