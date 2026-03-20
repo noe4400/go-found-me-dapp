@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { PhantomAppShell } from './src/components/phantom-app-shell';
 import { RootStack } from './src/navigation/root-stack';
 import { googleFontsToLoad } from './theme/fonts';
 
@@ -21,14 +22,16 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <BottomSheetModalProvider>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <RootStack />
-            <StatusBar style="dark" />
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </BottomSheetModalProvider>
+      <PhantomAppShell>
+        <BottomSheetModalProvider>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <RootStack />
+              <StatusBar style="dark" />
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </BottomSheetModalProvider>
+      </PhantomAppShell>
     </GestureHandlerRootView>
   );
 }

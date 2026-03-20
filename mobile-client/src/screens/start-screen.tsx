@@ -4,12 +4,13 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useMemo } from 'react';
 import type { PressableStateCallbackType } from 'react-native';
-import { Alert, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Pressable } from 'react-native-unistyles/components/native/Pressable';
 import { StyleSheet } from 'react-native-unistyles';
 
 import type { RootStackParamList } from '../navigation/types';
+import { useWalletConnection } from '../hooks/useWalletConnection';
 
 /** Fixed sheet height: one snap = sheet is exactly this tall (not a “max” cap). */
 const WALLET_SHEET_SNAP_PCT = '30%';
@@ -18,6 +19,7 @@ const WALLET_SHEET_SNAP_PCT = '30%';
 export function StartScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const insets = useSafeAreaInsets();
+  const { openConnectModal, isConnected, solanaAddress } = useWalletConnection();
   /** Single detent → sheet height is exactly 30% of the container (not a max-with-dynamic-sizing). */
   const snapPoints = useMemo(() => [WALLET_SHEET_SNAP_PCT], []);
 
@@ -60,15 +62,20 @@ export function StartScreen() {
       >
         <BottomSheetView style={styles.sheetInner}>
           <Text style={styles.sheetTitle}>Add a wallet to start</Text>
+          {isConnected && solanaAddress != null ? (
+            <Text style={styles.sheetSubtitle} numberOfLines={1}>
+              {solanaAddress}
+            </Text>
+          ) : null}
           <Pressable
             style={styles.walletCta}
-            onPress={() => {
-              Alert.alert('Phantom', 'Wallet connection will be wired next.');
-            }}
+            onPress={() => openConnectModal()}
             accessibilityRole="button"
             accessibilityLabel="Connect Phantom wallet"
           >
-            <Text style={styles.walletCtaLabel}>Connect phantom wallet</Text>
+            <Text style={styles.walletCtaLabel}>
+              {isConnected ? 'Manage wallet' : 'Connect phantom wallet'}
+            </Text>
           </Pressable>
         </BottomSheetView>
       </BottomSheet>
@@ -126,6 +133,13 @@ const styles = StyleSheet.create((theme, rt) => ({
     fontFamily: theme.typography.fontFamily.sans.bold,
     fontSize: theme.typography.fontSize.titleSmall,
     color: theme.colors.text,
+    textAlign: 'center',
+  },
+  sheetSubtitle: {
+    marginTop: theme.spacing.sm,
+    fontFamily: theme.typography.fontFamily.sans.regular,
+    fontSize: theme.typography.fontSize.caption,
+    color: theme.colors.textMuted,
     textAlign: 'center',
   },
   walletCta: (state: PressableStateCallbackType) => ({

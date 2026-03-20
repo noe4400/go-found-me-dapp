@@ -3,6 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "moduleSuffixes": [".ios", ".android", ".native", ""],
     "paths": {
       "react-native-unistyles/components/native/Pressable": [
         "node_modules/react-native-unistyles/lib/typescript/src/components/native/Pressable.native.d.ts"

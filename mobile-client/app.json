@@ -2,6 +2,7 @@
   "expo": {
     "name": "mobile-client",
     "slug": "mobile-client",
+    "scheme": "solfundme",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,9 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.noe4400.mobileclient"
+      "bundleIdentifier": "com.noe4400.mobileclient",
+      "scheme": "solfundme"
     },
     "android": {
+      "scheme": "solfundme",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -27,6 +30,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-web-browser"
+    ]
   }
 }
